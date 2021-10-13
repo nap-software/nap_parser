@@ -1,0 +1,67 @@
+#include "internal.h"
+#include <string.h>
+
+bool nap_parser__parseKeyValue(
+	const char *string,
+	char *key, size_t key_len,
+	char *value, size_t value_len
+) {
+	size_t length = strlen(string);
+
+	if (!length) return false;
+
+	// Flag (whether we are reading the key string or value string)
+	bool readingKey = true;
+	// Write position for key,value
+	int pos = 0;
+
+	// Initialie key/value with zeros (safety precaution)
+	if (key) memset(key, 0, key_len);
+	if (value) memset(value, 0, value_len);
+
+	for (size_t i = 0; i < length; ++i) {
+		char ch = string[i];
+
+		// Check position index
+		bool shouldWrite = false;
+
+		// Position check for key
+		if (readingKey) {
+			shouldWrite = (key && key_len > pos);
+		}
+		// Position check for value
+		else {
+			shouldWrite = (value && value_len > pos);
+		}
+
+		// Reading key first
+		if (readingKey) {
+			// End of key
+			if (ch == ',') {
+				// Terminate key
+				if (shouldWrite) key[pos] = 0;
+				readingKey = false;
+				// reset pos for value
+				pos = 0;
+			} else {
+				// Only write to key if it is in the bounds
+				if (shouldWrite) key[pos] = ch;
+				++pos;
+			}
+		} else {
+			// Only write to value if it is in the bounds
+			if (shouldWrite) value[pos] = ch;
+			++pos;
+		}
+	}
+
+	// Handle strings without comma-separator
+	// After the loop we shouldn't be in the reading key phase anymore
+	if (readingKey) return false;
+
+	// Make sure key and value are *always* terminated
+	if (key) key[key_len - 1] = 0;
+	if (value) value[value_len - 1] = 0;
+
+	return true;
+}
