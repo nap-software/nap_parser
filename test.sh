@@ -1,7 +1,5 @@
 #!/bin/bash -u
 
-mkdir -p bin/
-
 ./compile-tests.sh
 
 if [ "$?" -eq 0 ]; then

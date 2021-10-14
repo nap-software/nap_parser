@@ -5,8 +5,6 @@
 	#include <stdint.h> // uint8_t
 	#include <stdlib.h> // size_t
 
-	const char *nap_parser__version(void);
-
 	bool nap_parser__parseDecimal(const char *string, unsigned long *out);
 	bool nap_parser__parseHexadecimal(const char *string, unsigned long *out);
 	bool nap_parser__parseMACAddress(const char *string, uint8_t *out);

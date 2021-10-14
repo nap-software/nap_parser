@@ -1,5 +1,8 @@
 #!/bin/bash -eu
 
+rm -rf bin/
+mkdir -p bin/
+
 for file in ./tests/*.c
 do
 	testname="$(basename $file | cut -d '.' -f 1)"
