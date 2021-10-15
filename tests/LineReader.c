@@ -25,7 +25,7 @@ TEST_CASE("It should work properly") {
 }
 
 TEST_CASE("It should work with a string that does not end with a new line") {
-	const char *input = "hello\nabc"; // <- remove me later
+	const char *input = "hello\nabc";
 	nap_parser__LineReaderContext ctx;
 
 	ctx = nap_parser__createLineReaderContext(input, 128);
@@ -64,6 +64,31 @@ TEST_CASE("It should truncate properly") {
 			nap_parser__readLine(&ctx)
 		) == 0
 	);
+	assert(!nap_parser__readLine(&ctx));
+	nap_parser__destroyLineReaderContext(ctx);
+}
+
+TEST_CASE("It should work with empty lines in between (bug #1)") {
+	const char *input = "hello\n\n\nworld";
+	nap_parser__LineReaderContext ctx;
+
+	ctx = nap_parser__createLineReaderContext(input, 128);
+
+	assert(
+		strcmp(
+			"hello",
+			nap_parser__readLine(&ctx)
+		) == 0
+	);
+	assert(!strlen(nap_parser__readLine(&ctx)));
+	assert(!strlen(nap_parser__readLine(&ctx)));
+	assert(
+		strcmp(
+			"world",
+			nap_parser__readLine(&ctx)
+		) == 0
+	);
+
 	assert(!nap_parser__readLine(&ctx));
 	nap_parser__destroyLineReaderContext(ctx);
 }

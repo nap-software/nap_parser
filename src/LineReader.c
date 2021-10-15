@@ -39,6 +39,7 @@ const char *nap_parser__readLine(nap_parser__LineReaderContext *ctx) {
 		if (ch == '\n') {
 			// Terminate line
 			if (shouldWrite) ctx->line[pos] = 0;
+			++pos;
 			break;
 		}
 
