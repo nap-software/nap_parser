@@ -1,4 +1,4 @@
-# nap_parser
+# napc_parser@0.0.2
 
 This library provides means to parse various user inputs.
 
