@@ -126,7 +126,7 @@ const char *string = "Hello\nWorld";
 // This variable holds the current line
 const char *line;
 
-nap_parser__LineReaderContext ctx = nap_parser__createLineParserContext(string, 128);
+nap_parser__LineReaderContext ctx = nap_parser__createLineReaderContext(string, 128);
 
 while ((line = nap_parser__readLine(ctx)) {
 	// Do something with `line`
